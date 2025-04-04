@@ -1,0 +1,108 @@
+name: Python Backend Development Rules
+description: 基于 FastAPI 的后端开发规范
+
+# 引用通用规则
+include: common.mdc
+
+# 基础编码规范
+code_style:
+  language: python
+  indentation: 4  # 4空格缩进
+  line_length: 79  # 单行不超过79字符
+  quotes: double  # 使用双引号
+  test: pytest  # 使用pytest进行测试
+  naming_conventions:
+    variable: snake_case  # 变量使用小写字母+下划线
+    function: snake_case  # 函数命名规范
+    class: PascalCase     # 类名大驼峰
+    constant: UPPER_SNAKE_CASE  # 常量全大写
+
+# 注释与文档
+conventions:
+  - 注释风格使用reStructureText风格
+  - 每个公共函数/类需添加三引号文档字符串
+  - 复杂逻辑添加单行注释（#）并与代码间隔2空格
+  - 使用类型提示（Type Hints）
+
+# 文件与目录结构
+file_structure:
+  src:
+    __init__.py: "自动生成"
+    models: "数据模型目录"
+    rules: "业务逻辑层"
+    daos: "数据访问层"
+    views: "controller层"
+    utils: "工具函数"
+    commons: "公共函数、类库等"
+    dp: "设计模式层，装饰器、依赖注入等与模式有关的设计"
+  tests:
+    __init__.py: "自动生成"
+    test_*.py: "测试文件命名规范"
+
+# 依赖管理
+dependencies:
+  manager: uv
+  requirements:
+    - fastapi
+    - sqlalchemy
+    - pydantic
+    - injector
+    - pytest
+    - black
+    - pylint
+    - mypy
+
+# 代码质量
+quality:
+  linters:
+    - pylint
+    - mypy
+  formatters:
+    - black
+  test_coverage: 80  # 最低测试覆盖率要求
+
+# 异步编程规范
+async:
+  - 使用 async/await 处理 I/O 操作
+  - 避免在异步函数中执行阻塞操作
+  - 使用 asyncio.gather 并发执行多个异步任务
+
+# 错误处理
+error_handling:
+  - 使用自定义异常类
+  - 统一异常处理机制
+  - 提供清晰的错误信息
+  - 记录关键错误日志
+
+# 性能优化
+performance:
+  - 使用连接池管理数据库连接
+  - 合理使用缓存机制
+  - 避免 N+1 查询问题
+  - 使用异步 I/O 操作
+
+# 安全规范
+security:
+  - 使用环境变量管理敏感信息
+  - 实现请求速率限制
+  - 使用 HTTPS
+  - 实现用户认证和授权
+
+# 版本控制
+version_control:
+  - 使用语义化版本号
+  - 提交信息需要清晰描述改动
+  - 重要功能需要创建特性分支
+  - 使用 Pull Request 进行代码审查
+
+# 开发工具配置
+tools:
+  black:
+    line_length: 79
+    target_version: py39
+  pylint:
+    max-line-length: 79
+    disable: C0111
+  mypy:
+    strict: true
+    ignore_missing_imports: true

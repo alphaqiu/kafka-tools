@@ -1,0 +1,20 @@
+[project]
+name = "kafka-tools"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "aiokafka>=0.12.0",
+    "asyncio>=3.4.3",
+    "typer>=0.15.2",
+]
+
+[dependency-groups]
+dev = [
+    "black>=25.1.0",
+    "isort>=6.0.1",
+    "pylint>=3.3.6",
+    "pytest>=8.3.5",
+    "pytest-asyncio>=0.26.0",
+]

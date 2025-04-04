@@ -1,0 +1,49 @@
+---
+description: 
+globs: *.py
+alwaysApply: false
+---
+# 通用开发规范
+
+## 基础编码规范
+- 使用 4 空格缩进
+- 行长度限制为 79 字符
+- 使用双引号作为字符串定界符
+- 使用空行分隔函数和类定义
+
+## 命名规范
+- 变量名：使用小写字母和下划线（snake_case）
+- 函数名：使用小写字母和下划线（snake_case）
+- 类名：使用大驼峰命名法（PascalCase）
+- 常量：使用大写字母和下划线（UPPER_SNAKE_CASE）
+
+## 注释与文档
+- 注释风格使用 reStructureText 风格
+- 每个公共函数/类需添加三引号文档字符串
+- 复杂逻辑添加单行注释（#）并与代码间隔 2 空格
+- 使用类型提示（Type Hints）
+
+## 版本控制
+- 使用语义化版本号
+- 提交信息需要清晰描述改动
+- 重要功能需要创建特性分支
+- 使用 Pull Request 进行代码审查
+
+## 开发工具配置
+### Black
+```ini
+line-length = 79
+target-version = py39
+```
+
+### Pylint
+```ini
+max-line-length = 79
+disable = C0111
+```
+
+### MyPy
+```ini
+strict = true
+ignore_missing_imports = true
+```
