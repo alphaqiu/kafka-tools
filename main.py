@@ -2,6 +2,10 @@ import asyncio
 
 import typer
 from aiokafka.admin import AIOKafkaAdminClient, NewTopic
+from aiokafka.coordinator.protocol import (
+    ConsumerProtocolMemberAssignment,
+    ConsumerProtocolMemberMetadata,
+)
 from aiokafka.errors import (
     GroupAuthorizationFailedError,
     GroupIdNotFound,
@@ -215,11 +219,42 @@ async def _describe_group(admin: AIOKafkaAdminClient, group_id: str, **kwargs):
             typer.echo("Members:")
 
             for member in members:
-                print(member)
-            #     typer.echo(f"\n  Member ID:     {member.member_id}")
-            #     typer.echo(f"  Client ID:     {member.client_id}")
-            #     typer.echo(f"  Client Host:   {member.client_host}")
-            #     typer.echo("  Assignments:")
+                (
+                    member_id,
+                    client_id,
+                    client_host,
+                    member_metadata,
+                    member_assignment,
+                ) = member
+                typer.echo(f"\n  Member ID:     {member_id}")
+                typer.echo(f"  Client ID:     {client_id}")
+                typer.echo(f"  Client Host:   {client_host}")
+
+                # 解析 member_metadata
+                try:
+                    metadata = ConsumerProtocolMemberMetadata.decode(member_metadata)
+                    typer.echo("  Metadata:")
+                    typer.echo(f"    Version:      {metadata.version}")
+                    typer.echo(f"    Subscription: {metadata.subscription}")
+                    if metadata.user_data:
+                        typer.echo(f"    User Data:    {metadata.user_data}")
+                except Exception as e:
+                    typer.echo(f"  Failed to decode metadata: {e}")
+
+                # 解析 member_assignment
+                try:
+                    assignment = ConsumerProtocolMemberAssignment.decode(
+                        member_assignment
+                    )
+                    typer.echo("  Assignments:")
+                    typer.echo(f"    Version:      {assignment.version}")
+                    for topic, partitions in assignment.assignment:
+                        typer.echo(f"    Topic:        {topic}")
+                        typer.echo(f"    Partitions:   {partitions}")
+                    if assignment.user_data:
+                        typer.echo(f"    User Data:    {assignment.user_data}")
+                except Exception as e:
+                    typer.echo(f"  Failed to decode assignment: {e}")
 
     except GroupIdNotFound:
         typer.echo(f"Error: Consumer group '{group_id}' not found!", err=True)
